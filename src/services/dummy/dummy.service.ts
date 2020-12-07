@@ -10,7 +10,7 @@ export const DummiesList = new Map([
 ]);
 
 export function createDummyByType(type: DummyType, dummyParams: DummyParams) {
-  if (!validDummyType(type)) throwError('Invalid dummy type')
+  if (!validDummyType(type)) throwError('Invalid dummy type');
   return createNewDummy(type, dummyParams);
 }
 
@@ -29,4 +29,5 @@ function createNewDummy(type: DummyType, dummyParams: DummyParams) {
 
 export function setDummyDirection(dummy: Dummy, direction: DummyDirection) {
   dummy.setDirection(direction);
+  dummy.addMoveDirectionAction(direction);
 }

@@ -1,14 +1,29 @@
-import { MatrixPosition, Matrix } from '../game/matrix.service';
+import {CellType, fillInMatrixCell, Matrix, MatrixPosition} from '../game/matrix.service';
 
 export interface FoodParams {
-  position: MatrixPosition,
-  connectedMatrix: Matrix,
+  position?: MatrixPosition,
+  matrix: Matrix,
 }
 
 export class Food {
-  constructor({ position, connectedMatrix }: FoodParams) {}
+  public connectedMatrix: Matrix;
+  public position: MatrixPosition;
 
-  public onTouch() {}
+  constructor({ position, matrix }: FoodParams) {
+    this.connectedMatrix = matrix;
+    this.position = position || this.defaultMatrixPosition;
+    fillInMatrixCell(this.connectedMatrix, this.position, CellType.Food);
+  }
 
-  private clear() {}
+  private get defaultMatrixPosition(): MatrixPosition {
+    const matrixSize = this.connectedMatrix.length;
+    const centerPosition = Math.floor(Math.round(matrixSize / 2) );
+    const row = centerPosition;
+    const column = centerPosition + Math.floor(centerPosition / 2);
+
+    return {
+      row,
+      column,
+    };
+  }
 }

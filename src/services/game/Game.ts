@@ -1,8 +1,8 @@
 import { createMatrix, Matrix } from './matrix.service';
 import { destroyGameUtils, initGameUtils } from './game.service';
 import { Dummy, DummyParams, DummySpeed } from '../dummy/Dummy';
-import { Food } from '../food/Food';
-import { FoodType } from '../food/food.service';
+import { Food, FoodParams } from '../food/Food';
+import { FoodType, createFoodByType } from '../food/food.service';
 import { createDummyByType, DummyType } from '../dummy/dummy.service';
 
 interface GameParams {
@@ -100,8 +100,8 @@ export class Game {
     this.dummy = createDummyByType(dummyType, dummyParams);
   }
 
-  // public addFood(foodType: FoodType, foodParams: FoodParams = {}) {
-  //   this.food = createFoodByType(foodType, foodParams);
-  //   // TODO: add food in random coordinates where no dummy or food already
-  // }
+  public addFood(foodType: FoodType, foodParams: FoodParams = { matrix: this.matrix }) {
+    // TODO: add food in random coordinates where no dummy or food already
+    this.food = createFoodByType(foodType, foodParams);
+  }
 }

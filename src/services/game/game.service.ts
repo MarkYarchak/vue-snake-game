@@ -1,6 +1,6 @@
-import { fromEvent, Subscription } from 'rxjs';
-import {distinctUntilKeyChanged, throttleTime, delay} from 'rxjs/operators';
-import { reactive } from 'vue';
+import {fromEvent, Subscription} from 'rxjs';
+import {distinctUntilKeyChanged, throttleTime} from 'rxjs/operators';
+import {reactive} from 'vue';
 import {DummyDirection} from '../dummy/Dummy';
 import {DummyType, setDummyDirection} from '../dummy/dummy.service';
 import {Game, GameStatus} from './Game';
@@ -35,7 +35,10 @@ export function createNewGame(): Game {
     foodType: FoodType.Apple,
   });
   game = reactive(newGame) as Game;
+
   game.addDummy(DummyType.Snake);
+  game.addFood(FoodType.Apple);
+
   return game;
 }
 
@@ -61,7 +64,6 @@ function initKeysDownHandlers() {
   keydownEvent$ = fromEvent<KeyboardEvent>(window, 'keydown')
     .pipe(
       distinctUntilKeyChanged('code'),
-      delay(110),
       throttleTime(0)
     )
     .subscribe(keyDownHandler);

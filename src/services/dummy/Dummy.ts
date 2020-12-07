@@ -14,6 +14,13 @@ export enum DummySpeed {
   Fast = 15,
 }
 
+export const OppositeDummyPosition = {
+  [DummyDirection.Top]: DummyDirection.Bottom,
+  [DummyDirection.Bottom]: DummyDirection.Top,
+  [DummyDirection.Left]: DummyDirection.Right,
+  [DummyDirection.Right]: DummyDirection.Left,
+};
+
 export interface DummyParams {
   position?: MatrixPosition;
   speed: DummySpeed;
@@ -26,6 +33,7 @@ export class Dummy {
   private speed: DummySpeed = DummySpeed.Medium;
   private moveInterval: number | undefined;
   public connectedMatrix!: Matrix;
+  private moveDirectionActions: DummyDirection[] = [];
 
   constructor({ matrix, position, speed }: DummyParams) {
     this.updateConnectedMatrix(matrix);
@@ -53,22 +61,50 @@ export class Dummy {
   }
 
   public setMatrixPositions(positions: MatrixPosition[] = [this.defaultMatrixPosition]) {
+    const tailLastPosition = this.positions[this.positions.length - 1]
     this.positions.splice(0);
     this.positions.push(...positions);
     if (!isNewGameProcess()) {
       this.connectedMatrix.forEach((matrixRow, row) =>
-        matrixRow.forEach((val, column) =>
+        matrixRow.forEach((val, column) => {
           fillInMatrixCell(
             this.connectedMatrix,
             { row, column },
-            (val === CellType.Dummy) ? CellType.Empty : val)
-        )
+            (val === CellType.Dummy) ? CellType.Empty : val
+          )
+        })
       );
     }
 
     positions.forEach((pos) => {
+      const snakeHeadPosition: MatrixPosition = positions[0];
+      const { row, column } = snakeHeadPosition;
+      const isFoodCell: boolean = this.connectedMatrix[row][column] === CellType.Food;
+      if (isFoodCell) {
+        this.onEat(tailLastPosition);
+      }
       fillInMatrixCell(this.connectedMatrix, pos, CellType.Dummy);
     });
+  }
+
+  public addMoveDirectionAction(direction: DummyDirection) {
+    const pushLimit: number = [DummySpeed.Slow, DummySpeed.Medium, DummySpeed.Fast].indexOf(this.speed) + 2;
+    if (this.moveDirectionActions.length <= pushLimit) {
+      this.moveDirectionActions.push(direction);
+    }
+  }
+
+  public onEat(newTailPosition: MatrixPosition) {
+    // TODO: set new random position of food
+    this.growUp(newTailPosition);
+  }
+
+  protected growUp(tailPosition: MatrixPosition) {
+    this.positions.push(tailPosition);
+  }
+
+  private clearMoveDirectionActions() {
+    this.moveDirectionActions.splice(0);
   }
 
   public setSpeed(newSpeed: DummySpeed) {
@@ -81,10 +117,20 @@ export class Dummy {
 
   public startMoving() {
     const moveFrequency = 1000 / this.speed;
-    this.moveInterval = setInterval(this.moveOnce.bind(this), moveFrequency);
+    this.moveInterval = setInterval(() => {
+      if (this.moveDirectionActions.length) {
+        this.moveDirectionActions.forEach((direction) => {
+          this.moveOnce.call(this, direction);
+        });
+        this.clearMoveDirectionActions();
+      } else {
+        this.moveOnce.call(this);
+      }
+    }, moveFrequency);
   }
 
-  private moveOnce() {
+  public moveOnce(direction?: DummyDirection) {
+    this.setDirection(direction || this.direction);
     const newPositions: MatrixPosition[] = this.calculateNextPositions();
     const headPosition = newPositions[0];
     const busySnakeTailPosition = this.isSnakeTailNextHeadPosition(newPositions);
@@ -138,12 +184,6 @@ export class Dummy {
   }
 
   private isOppositeDirection(newDirection: DummyDirection): boolean {
-    const oppositeTable = {
-      [DummyDirection.Top]: DummyDirection.Bottom,
-      [DummyDirection.Bottom]: DummyDirection.Top,
-      [DummyDirection.Left]: DummyDirection.Right,
-      [DummyDirection.Right]: DummyDirection.Left,
-    };
-    return oppositeTable[newDirection] === this.direction;
+    return OppositeDummyPosition[newDirection] === this.direction;
   }
 }
