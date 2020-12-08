@@ -10,23 +10,24 @@
     margin: 0!important;
 }
 
-.pulse {
+.pulse-animation {
     animation-name: pulse;
-    animation-timing-function: ease-in-out;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
     animation-iteration-count: infinite;
 }
 
 
 @keyframes pulse {
     from {
-        transform: scale3d(1, 1, 1);
+        transform: scale(1, 1);
     }
 
     50% {
-        transform: scale3d(1.05, 1.05, 1.05);
+        transform: scale(1.2, 1.2);
     }
 
     to {
-        transform: scale3d(1, 1, 1);
+        transform: scale(1);
     }
 }

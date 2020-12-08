@@ -2,7 +2,7 @@ import { Apple } from './skins/Apple';
 import { FoodParams } from './Food';
 
 export enum FoodType {
-  Apple = 'SNAKE_DUMMY_TYPE',
+  Apple = 'APPLE_FOOD_TYPE',
 }
 
 export const FoodList = new Map([

@@ -1,5 +1,6 @@
 import { CellType, fillInMatrixCell, Matrix, MatrixPosition } from '../game/matrix.service';
 import { game, isNewGameProcess } from '../game/game.service';
+import { FoodParams } from '@/services/food/Food';
 
 export enum DummyDirection {
   Top = 'TOP_SNAKE_DIRECTION',
@@ -95,7 +96,8 @@ export class Dummy {
   }
 
   public onEat(newTailPosition: MatrixPosition) {
-    // TODO: set new random position of food
+    const foodParams: FoodParams = game.food.prepareNew();
+    game.addFood(game.foodType, foodParams);
     this.growUp(newTailPosition);
   }
 

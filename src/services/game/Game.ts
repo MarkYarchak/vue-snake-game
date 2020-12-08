@@ -26,7 +26,7 @@ export class Game {
   public readonly playFieldSize: string = '';
   public score = 0;
   public maxScore: number = 0;
-  public status!: GameStatus;
+  public status: GameStatus = GameStatus.Initialized;
   public previousStatus!: GameStatus;
   public dummyType: DummyType;
   public foodType: FoodType;
@@ -40,7 +40,6 @@ export class Game {
     this.dummyType = dummyType;
     this.foodType = foodType;
     initGameUtils();
-    this.setGameStatus(GameStatus.Initialized);
   }
 
   private setGameStatus(status: GameStatus) {

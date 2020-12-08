@@ -3,14 +3,21 @@
     :style="{ width: size + '%', backgroundColor: cellBgColor }"
     class="MatrixCell"
   >
-    <div v-if="$props.cell.content === CellType.Dummy" class="DummyContent" />
-    <i v-else-if="$props.cell.content === CellType.Food" class="fas fa-apple-alt" style="color: red" />
+    <div v-if="cell.content === CellType.Dummy" class="DummyContent" />
+    <i
+      v-else-if="cell.content === CellType.Food"
+      class="pulse-animation"
+      :class="game.food.classes"
+      :style="game.food.styles"
+      style="font-size: 26px"
+    />
   </div>
 </template>
 
 <script lang="ts">
 import { computed } from 'vue';
 import { GrassColor, MatrixPosition, CellType } from '@/services/game/matrix.service';
+import { game } from '@/services/game/game.service';
 
 interface Props {
   cell: {
@@ -20,7 +27,7 @@ interface Props {
   size: number;
 }
 
-// TODO: for food cell type add animation, transition
+// TODO: for food cell type add transition
 // TODO: for dummy cell type add transition and leave side type effect
 
 export default {
@@ -47,6 +54,7 @@ export default {
     return {
       cellBgColor,
       CellType,
+      game,
     };
   },
 };
@@ -65,9 +73,5 @@ export default {
     height: 100%;
     background-color: royalblue;
     transition: 0.2s;
-  }
-
-  .FoodContent {
-    transition: 0.3s;
   }
 </style>
