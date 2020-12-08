@@ -1,8 +1,8 @@
 import {CellType, fillInMatrixCell, Matrix, MatrixPosition} from '../game/matrix.service';
 
 export interface FoodParams {
-  position?: MatrixPosition,
-  matrix: Matrix,
+  position?: MatrixPosition;
+  matrix: Matrix;
 }
 
 export class Food {

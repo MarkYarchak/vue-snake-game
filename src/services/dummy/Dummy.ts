@@ -61,7 +61,7 @@ export class Dummy {
   }
 
   public setMatrixPositions(positions: MatrixPosition[] = [this.defaultMatrixPosition]) {
-    const tailLastPosition = this.positions[this.positions.length - 1]
+    const tailLastPosition = this.positions[this.positions.length - 1];
     this.positions.splice(0);
     this.positions.push(...positions);
     if (!isNewGameProcess()) {
@@ -71,7 +71,7 @@ export class Dummy {
             this.connectedMatrix,
             { row, column },
             (val === CellType.Dummy) ? CellType.Empty : val
-          )
+          );
         })
       );
     }
@@ -164,7 +164,7 @@ export class Dummy {
 
   private isForbiddenPosition(position: MatrixPosition): boolean {
     // TODO: add busy food position
-    return position.column > game.matrixSize || position.column < 0 || position.row > game.matrixSize || position.row < 0;
+    return position.column >= game.matrixSize || position.column < 0 || position.row >= game.matrixSize || position.row < 0;
   }
 
   private isSnakeTailNextHeadPosition(newPositions: MatrixPosition[]): boolean {
