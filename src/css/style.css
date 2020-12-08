@@ -6,8 +6,22 @@
     box-sizing: border-box;
 }
 
+.d-flex {
+    display: flex;
+}
+.align-center {
+    align-items: center;
+}
+
+
 .no-margin {
     margin: 0!important;
+}
+.ml-1 {
+    margin-left: 1em;
+}
+.ml-2 {
+    margin-left: 2em;
 }
 
 .pulse-animation {

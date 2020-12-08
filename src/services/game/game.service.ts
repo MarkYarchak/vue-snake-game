@@ -43,7 +43,8 @@ export function createNewGame(): Game {
 }
 
 export function restartGame() {
-  game.restart();
+  // game.restart();
+  createNewGame();
 }
 
 function isMobile(): boolean {
@@ -132,6 +133,7 @@ export function pauseGameProcess() {
 }
 
 export function resumeGameProcess() {
+  // TODO: apply settings from dialog
   if (pausedGameProcess()) {
     game.resume();
     closePauseDialog();

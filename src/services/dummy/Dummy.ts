@@ -35,6 +35,7 @@ export class Dummy {
   private moveInterval: number | undefined;
   public connectedMatrix!: Matrix;
   private moveDirectionActions: DummyDirection[] = [];
+  public coveredSteps = [];
 
   constructor({ matrix, position, speed }: DummyParams) {
     this.updateConnectedMatrix(matrix);
@@ -99,6 +100,7 @@ export class Dummy {
     const foodParams: FoodParams = game.food.prepareNew();
     game.addFood(game.foodType, foodParams);
     this.growUp(newTailPosition);
+    game.addScore();
   }
 
   protected growUp(tailPosition: MatrixPosition) {

@@ -92,7 +92,12 @@ export class Game {
   }
 
   private rollBackDefaultState() {
+    this.matrix = createMatrix(this.matrixSize);
     // TODO: clear old state
+  }
+
+  public addScore() {
+    this.score++;
   }
 
   public addDummy(dummyType: DummyType, dummyParams: DummyParams = { speed: DummySpeed.Medium, matrix: this.matrix }) {
