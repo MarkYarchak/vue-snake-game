@@ -11,10 +11,10 @@ const InvolvedKeysWithActions = new Map([
   ['ArrowLeft', DummyDirection.Left],
   ['ArrowDown', DummyDirection.Bottom],
   ['ArrowRight', DummyDirection.Right],
-  ['w', DummyDirection.Top],
-  ['a', DummyDirection.Left],
-  ['s', DummyDirection.Bottom],
-  ['d', DummyDirection.Right],
+  ['KeyW', DummyDirection.Top],
+  ['KeyA', DummyDirection.Left],
+  ['KeyS', DummyDirection.Bottom],
+  ['KeyD', DummyDirection.Right],
 ]);
 
 const GameSystemKeyCodesWithActions = new Map([
