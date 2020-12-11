@@ -15,7 +15,14 @@ export enum DummySpeed {
   Fast = 15,
 }
 
-export const OppositeDummyPosition = {
+export enum DummyTurn {
+  TopLeft = 'DUMMY_TURN_TOP_LEFT',
+  TopRight = 'DUMMY_TURN_TOP_RIGHT',
+  RightBottom = 'DUMMY_TURN_RIGHT_BOTTOM',
+  LeftBottom = 'DUMMY_TURN_LEFT_BOTTOM',
+}
+
+export const OppositeDummyDirection = {
   [DummyDirection.Top]: DummyDirection.Bottom,
   [DummyDirection.Bottom]: DummyDirection.Top,
   [DummyDirection.Left]: DummyDirection.Right,
@@ -28,6 +35,11 @@ export interface DummyParams {
   matrix: Matrix;
 }
 
+export interface DummyStep {
+  position: MatrixPosition;
+  direction: DummyDirection;
+}
+
 export class Dummy {
   private direction: DummyDirection = DummyDirection.Right;
   public positions: MatrixPosition[] = [];
@@ -35,18 +47,18 @@ export class Dummy {
   private moveInterval: number | undefined;
   public connectedMatrix!: Matrix;
   private moveDirectionActions: DummyDirection[] = [];
-  public coveredSteps = [];
+  public coveredSteps: DummyStep[] = [];
 
   constructor({ matrix, position, speed }: DummyParams) {
     this.updateConnectedMatrix(matrix);
     if (!position) position = this.defaultMatrixPosition;
-    const defaultSnakePositions = [
+    const defaultDummyPositions: MatrixPosition[] = [
       { ...position, column: position.column + 3 },
       { ...position, column: position.column + 2 },
       { ...position, column: position.column + 1 },
       { ...position },
     ];
-    this.setMatrixPositions(defaultSnakePositions);
+    this.setMatrixPositions(defaultDummyPositions);
     this.setSpeed(speed);
   }
 
@@ -90,7 +102,7 @@ export class Dummy {
   }
 
   public addMoveDirectionAction(direction: DummyDirection) {
-    const pushLimit: number = [DummySpeed.Slow, DummySpeed.Medium, DummySpeed.Fast].indexOf(this.speed) + 2;
+    const pushLimit: number = Object.values(DummySpeed).indexOf(this.speed) + 2;
     if (this.moveDirectionActions.length <= pushLimit) {
       this.moveDirectionActions.push(direction);
     }
@@ -101,6 +113,7 @@ export class Dummy {
     game.addFood(game.foodType, foodParams);
     this.growUp(newTailPosition);
     game.addScore();
+    // this.eatenPosition =
   }
 
   protected growUp(tailPosition: MatrixPosition) {
@@ -120,7 +133,8 @@ export class Dummy {
   }
 
   public startMoving() {
-    const moveFrequency = 1000 / this.speed;
+    const oneSecond = 1000;
+    const moveFrequency = oneSecond / this.speed;
     this.moveInterval = setInterval(() => {
       if (this.moveDirectionActions.length) {
         this.moveDirectionActions.forEach((direction) => {
@@ -188,6 +202,6 @@ export class Dummy {
   }
 
   private isOppositeDirection(newDirection: DummyDirection): boolean {
-    return OppositeDummyPosition[newDirection] === this.direction;
+    return OppositeDummyDirection[newDirection] === this.direction;
   }
 }
