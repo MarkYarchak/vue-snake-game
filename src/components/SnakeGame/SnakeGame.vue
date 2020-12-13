@@ -7,8 +7,7 @@
 
 <script lang="ts">
 import GameActionsBar from './GameActionsBar.vue';
-import { Game } from '@/services/game/Game';
-import { createNewGame } from '@/services/game/game.service';
+import { createNewGame, game } from '@/services/game/game.service';
 import GameBoard from './GameBoard.vue';
 
 export default {
@@ -17,7 +16,7 @@ export default {
     GameActionsBar,
   },
   setup() {
-    const game: Game = createNewGame();
+    createNewGame();
     return {
       game,
     };

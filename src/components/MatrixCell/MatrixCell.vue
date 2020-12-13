@@ -24,7 +24,7 @@
   import {game} from '@/services/game/game.service';
   import {DummyTurn} from '@/services/dummy/Dummy';
 
-interface Props {
+  interface Props {
   cell: {
     content: CellType;
     position: MatrixPosition;
@@ -48,7 +48,6 @@ export default {
   },
 
   setup(props: Props) {
-    const positions: MatrixPosition[] = reactive(game.dummy.positions);
     const position: MatrixPosition = reactive(props.cell.position);
 
     const computedCellColor = computed(() => {
@@ -59,9 +58,11 @@ export default {
     const cellBgColor: GrassColor = computedCellColor.value;
 
     function getDummyPartStyles(): object {
+      const positions: MatrixPosition[] = game.dummy.positions;
+
       if (props.cell.content !== CellType.Dummy) return {};
 
-      const positionIndex: number = findDummyPartIndex(position);
+      const positionIndex: number = findDummyPartIndex(positions, position);
       const closestFrontPosition: MatrixPosition = positions[positionIndex - 1];
       const closestBackPosition: MatrixPosition = positions[positionIndex + 1];
       const closestPositions = [closestFrontPosition, closestBackPosition];
@@ -72,10 +73,11 @@ export default {
 
       return {
         borderRadius: dummyPartBorderRadius,
+        // animationName: positionIndex === 0 ? 'slideInLeft' : positionIndex === positions.length - 1 ? 'slideOutRight' : 'none',
       };
     }
 
-    function findDummyPartIndex({ row, column }: MatrixPosition): number {
+    function findDummyPartIndex(positions: MatrixPosition[], { row, column }: MatrixPosition): number {
       return positions.findIndex(p => p.row === row && p.column === column);
     }
 
@@ -159,6 +161,7 @@ export default {
     width: 100%;
     height: 100%;
     background-color: royalblue;
-    /*transition: 0.2s;*/
+    animation-duration: 0.06s;
+    animation-timing-function: linear;
   }
 </style>

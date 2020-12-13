@@ -43,8 +43,9 @@ export function createNewGame(): Game {
 }
 
 export function restartGame() {
-  // game.restart();
-  createNewGame();
+  destroyGameUtils();
+  game.restart();
+  initGameUtils();
 }
 
 function isMobile(): boolean {

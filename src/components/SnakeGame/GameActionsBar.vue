@@ -36,40 +36,22 @@
         Pause
       </button>
 
-      <dialog id="dialog-rounded" class="nes-dialog is-rounded">
-        <form method="dialog">
-          <p class="title" style="font-size: 18px">Settings</p>
-
-          <p class="nes-text is-primary">Best score: {{ game.maxScore }}</p>
-
-          <label htmlFor="success_select">Speed</label>
-          <div class="nes-select is-primary">
-            <select id="success_select" defaultValue="0" required>
-              <option value="0">Slow</option>
-              <option value="1">Medium</option>
-              <option value="1">Fast</option>
-            </select>
-          </div>
-
-          <menu class="dialog-menu" style="padding: 14px 20px 0">
-            <button class="nes-btn" style="margin-right: 12px" @click="resumeGameProcess">Cancel</button>
-            <button class="nes-btn is-primary" style="margin-left: 12px; padding: 6px 24px" @click="applyGameSetting">Save</button>
-          </menu>
-        </form>
-      </dialog>
+      <SettingsDialog :game="game" />
     </section>
   </div>
 </template>
 
 <script>
-import {
-  pauseGameProcess,
-  resumeGameProcess,
-  restartGame
-} from '@/services/game/game.service';
+import { computed } from 'vue';
+import SettingsDialog from '@/components/SnakeGame/SettingsDialog';
+import { restartGame, pauseGameProcess, game } from '@/services/game/game.service';
+import { GameStatus } from '@/services/game/Game';
 
 export default {
   name: 'GameActionsBar',
+  components: {
+    SettingsDialog,
+  },
   props: {
     game: {
       type: Object,
@@ -78,19 +60,16 @@ export default {
   },
   setup() {
 
-    const applyGameSetting = () => {
-      resumeGameProcess();
-    };
+    const isRunningGame = computed(() => game.status === GameStatus.Running);
+
     const onSettingsClick = () => {
       pauseGameProcess();
     };
 
     return {
-      isRunningGame: false, // TODO: replace with real game status
-      applyGameSetting,
-      onSettingsClick,
+      isRunningGame,
       restartGame,
-      resumeGameProcess,
+      onSettingsClick,
     };
   },
 };
