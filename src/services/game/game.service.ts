@@ -1,10 +1,9 @@
-import {fromEvent, Subscription} from 'rxjs';
-import {distinctUntilKeyChanged, throttleTime} from 'rxjs/operators';
-import {reactive} from 'vue';
-import {DummyDirection} from '../dummy/Dummy';
-import {DummyType, setDummyDirection} from '../dummy/dummy.service';
-import {Game, GameStatus} from './Game';
-import {FoodType} from '@/services/food/food.service';
+import { fromEvent, Subscription } from 'rxjs';
+import { throttleTime } from 'rxjs/operators';
+import { reactive } from 'vue';
+import { DummyDirection } from '../dummy/Dummy';
+import { setDummyDirection } from '../dummy/dummy.service';
+import { Game, GameStatus, GameSettings } from './Game';
 
 const InvolvedKeysWithActions = new Map([
   ['ArrowUp', DummyDirection.Top],
@@ -27,17 +26,11 @@ export let game: Game;
 let keydownEvent$: Subscription;
 
 
-export function createNewGame(): Game {
-  const defaultMatrixSize = 30;
-  const newGame = new Game({
-    matrixSize: defaultMatrixSize,
-    dummyType: DummyType.Snake,
-    foodType: FoodType.Apple,
-  });
+export function createNewGame(settings?: GameSettings): Game {
+  const newGame = new Game(settings);
   game = reactive(newGame) as Game;
 
-  game.addDummy(DummyType.Snake);
-  game.addFood(FoodType.Apple);
+  game.addAdaptationItems();
 
   return game;
 }
@@ -65,7 +58,6 @@ export function destroyGameUtils() {
 function initKeysDownHandlers() {
   keydownEvent$ = fromEvent<KeyboardEvent>(window, 'keydown')
     .pipe(
-      distinctUntilKeyChanged('code'),
       throttleTime(0)
     )
     .subscribe(keyDownHandler);
@@ -103,7 +95,6 @@ function gameSystemKeysController($event: KeyboardEvent) {
 
 function setupGameActions($event: KeyboardEvent) {
   if (!pausedGameProcess()) {
-    // TODO: connect RxJS for managing action events as events queue
     const newDummyDirection: DummyDirection = InvolvedKeysWithActions.get($event.code)!;
     if (isNewGameProcess() && newDummyDirection === DummyDirection.Left) return;
     setDummyDirection(game.dummy, newDummyDirection);
@@ -134,7 +125,6 @@ export function pauseGameProcess() {
 }
 
 export function resumeGameProcess() {
-  // TODO: apply settings from dialog
   if (pausedGameProcess()) {
     game.resume();
     closePauseDialog();
@@ -147,7 +137,7 @@ export function openPauseDialog() {
 }
 
 export function blurPauseDialogMenu() {
-  document.getElementById('success_select')!?.blur();
+  document.getElementById('speed_select')!?.blur();
 }
 
 export function closePauseDialog() {

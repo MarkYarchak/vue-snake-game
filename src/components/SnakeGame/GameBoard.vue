@@ -4,7 +4,7 @@
       v-for="(matrixRow, idx) of game.matrix"
       :key="idx"
       :cells="matrixRow"
-      :cell-size="100 / game.matrixSize"
+      :cell-size="100 / game.settings.matrixSize"
       :row-index="idx"
     />
   </div>

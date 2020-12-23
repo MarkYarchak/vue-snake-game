@@ -1,6 +1,8 @@
 import { CellType, fillInMatrixCell, Matrix, MatrixPosition } from '../game/matrix.service';
 import { game, isNewGameProcess } from '../game/game.service';
 import { FoodParams } from '@/services/food/Food';
+import { playSound } from '@/utils/sound-effects';
+import { LocalPath } from '@/utils/path-pointers';
 
 export enum DummyDirection {
   Top = 'TOP_SNAKE_DIRECTION',
@@ -64,9 +66,9 @@ export class Dummy {
 
   private get defaultMatrixPosition(): MatrixPosition {
     const matrixSize = this.connectedMatrix.length;
-    const centerPosition = Math.floor(Math.round(matrixSize / 2) );
+    const centerPosition = Math.round(matrixSize / 2);
     const row = centerPosition;
-    const column = Math.floor(centerPosition / 2);
+    const column = Math.round(centerPosition / 2);
 
     return {
       row,
@@ -109,11 +111,12 @@ export class Dummy {
   }
 
   public onEat(newTailPosition: MatrixPosition) {
+    playSound(LocalPath.EatSound);
     const foodParams: FoodParams = game.food.prepareNew();
-    game.addFood(game.foodType, foodParams);
+    game.addFood(game.settings.foodType, foodParams);
     this.growUp(newTailPosition);
     game.addScore();
-    // this.eatenPosition =
+    // this.eatenPosition = // TODO: position for snake food eating effect
   }
 
   protected growUp(tailPosition: MatrixPosition) {
@@ -133,8 +136,8 @@ export class Dummy {
   }
 
   public startMoving() {
-    const oneSecond = 1000;
-    const moveFrequency = oneSecond / this.speed;
+    const ONE_SECOND = 1000;
+    const moveFrequency = ONE_SECOND / this.speed;
     this.moveInterval = setInterval(() => {
       if (this.moveDirectionActions.length) {
         this.moveDirectionActions.forEach((direction) => {
@@ -152,7 +155,7 @@ export class Dummy {
     const newPositions: MatrixPosition[] = this.calculateNextPositions();
     const headPosition = newPositions[0];
     const busySnakeTailPosition = this.isSnakeTailNextHeadPosition(newPositions);
-    if (this.isForbiddenPosition(headPosition) || busySnakeTailPosition) return game.finish();
+    if (this.isForbiddenPosition(headPosition) || busySnakeTailPosition) return this.crash();
     this.setMatrixPositions(newPositions);
   }
 
@@ -181,14 +184,20 @@ export class Dummy {
   }
 
   private isForbiddenPosition(position: MatrixPosition): boolean {
-    // TODO: add busy food position
-    return position.column >= game.matrixSize || position.column < 0 || position.row >= game.matrixSize || position.row < 0;
+    const matrixSize = this.connectedMatrix.length;
+    return position.column >= matrixSize || position.column < 0 || position.row >= matrixSize || position.row < 0;
   }
 
   private isSnakeTailNextHeadPosition(newPositions: MatrixPosition[]): boolean {
     const headPosition = newPositions[0];
     const positions = newPositions.slice(1, newPositions.length);
     return positions.some(pos => pos.row === headPosition.row && pos.column === headPosition.column);
+  }
+
+  private crash() {
+    playSound(LocalPath.CrashSound);
+    this.stopMoving();
+    game.finish();
   }
 
   public stopMoving() {

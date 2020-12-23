@@ -1,5 +1,10 @@
 export type Matrix = CellType[][];
 
+export enum MatrixSize {
+  Min = 7,
+  Max = 100,
+}
+
 export enum GrassColor {
   Dark = 'rgb(162,209,73)',
   Light = 'rgb(130, 195, 84)', // rgb(170, 215, 81)

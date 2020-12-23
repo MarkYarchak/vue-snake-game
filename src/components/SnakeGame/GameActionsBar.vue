@@ -43,7 +43,7 @@
 
 <script>
 import { computed } from 'vue';
-import SettingsDialog from '@/components/SnakeGame/SettingsDialog';
+import SettingsDialog from '@/components/SettingsDialog/SettingsDialog';
 import { restartGame, pauseGameProcess, game } from '@/services/game/game.service';
 import { GameStatus } from '@/services/game/Game';
 

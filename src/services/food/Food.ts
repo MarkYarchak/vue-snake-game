@@ -17,8 +17,8 @@ export class Food {
   }
 
   private get defaultMatrixPosition(): MatrixPosition {
-    const matrixSize = this.connectedMatrix.length;
-    const centerPosition = Math.floor(Math.round(matrixSize / 2) );
+    const matrixSize = this.connectedMatrix.length - 1;
+    const centerPosition = Math.floor(Math.round(matrixSize / 2));
     const row = centerPosition;
     const column = centerPosition + Math.floor(centerPosition / 2);
 

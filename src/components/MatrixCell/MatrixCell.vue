@@ -1,6 +1,6 @@
 <template>
   <div
-    :style="{ width: size + '%', backgroundColor: cellBgColor }"
+    :style="{ width: size + '%', backgroundColor: cellBgColor, fontSize: (size * 5) + 'px'  }"
     class="MatrixCell"
   >
     <div
@@ -13,16 +13,16 @@
       class="pulse-animation"
       :class="game.food.classes"
       :style="game.food.styles"
-      style="font-size: 26px"
+      style="font-size: 160%"
     />
   </div>
 </template>
 
 <script lang="ts">
-  import {computed, reactive} from 'vue';
-  import {CellType, GrassColor, MatrixPosition} from '@/services/game/matrix.service';
-  import {game} from '@/services/game/game.service';
-  import {DummyTurn} from '@/services/dummy/Dummy';
+  import { computed, reactive } from 'vue';
+  import { CellType, GrassColor, MatrixPosition } from '@/services/game/matrix.service';
+  import { game } from '@/services/game/game.service';
+  import { DummyTurn } from '@/services/dummy/Dummy';
 
   interface Props {
   cell: {

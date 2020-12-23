@@ -5,10 +5,13 @@ import { Food, FoodParams } from '../food/Food';
 import { FoodType, createFoodByType } from '../food/food.service';
 import { createDummyByType, DummyType } from '../dummy/dummy.service';
 
-interface GameParams {
+export interface GameSettings {
   matrixSize: number;
   dummyType: DummyType;
+  dummySpeed: DummySpeed;
   foodType: FoodType;
+  useSounds: boolean;
+  default?: GameSettings;
 }
 
 export enum GameStatus {
@@ -20,30 +23,19 @@ export enum GameStatus {
   Destroyed = 'DESTROYED_GAME_STATUS', // Can be removed in future. Not recommended to bind with
 }
 
-export enum MatrixSize {
-  Min = 7,
-  Max = 100,
-}
-
 export class Game {
   public matrix: Matrix;
-  public matrixSize!: number;
-  public readonly playFieldSize: string = '';
   public score = 0;
   public maxScore: number = 0;
   public status: GameStatus = GameStatus.Initialized;
   public previousStatus!: GameStatus;
-  public dummyType: DummyType;
-  public foodType: FoodType;
   public dummy!: Dummy;
   public food!: Food;
+  public settings!: GameSettings;
 
-  constructor({ matrixSize, dummyType, foodType }: GameParams) {
-    this.matrix = createMatrix(matrixSize);
-    this.setMatrixSize(matrixSize);
-    this.playFieldSize = '800px';
-    this.dummyType = dummyType;
-    this.foodType = foodType;
+  constructor(settings: GameSettings = Game.defaultSettings) {
+    this.applySettings(settings);
+    this.matrix = createMatrix(settings.matrixSize);
     initGameUtils();
   }
 
@@ -57,26 +49,19 @@ export class Game {
   }
 
   public get boardStyles() {
+    const playFieldSize = '800px';
     return {
-      width: this.playFieldSize,
-      height: this.playFieldSize,
+      width: playFieldSize,
+      height: playFieldSize,
     };
   }
 
-  public setMatrixSize(size: number) {
-    if (size >= MatrixSize.Min && size <= MatrixSize.Max) {
-      this.matrixSize = size;
-    } else throw new Error('Invalid matrix size');
-  }
-
   public start() {
-    // TODO: resume dummy moving & food animation (add class back)
-    this.setGameStatus(GameStatus.Running);
     this.dummy.startMoving();
+    this.setGameStatus(GameStatus.Running);
   }
 
   public stop() {
-    // TODO: stop dummy, stop food animation (clear class for example)
     this.dummy.stopMoving();
     this.setGameStatus(GameStatus.Stopped);
   }
@@ -95,7 +80,6 @@ export class Game {
   }
 
   public finish() {
-    this.dummy.stopMoving();
     this.setGameStatus(GameStatus.Finished);
   }
 
@@ -108,8 +92,8 @@ export class Game {
     if (this.score > this.maxScore) this.maxScore = this.score;
   }
 
-  private rollBackDefaultState() {
-    this.matrix = createMatrix(this.matrixSize);
+  public rollBackDefaultState() {
+    this.matrix = createMatrix(this.settings.matrixSize);
     this.score = 0;
   }
 
@@ -118,15 +102,32 @@ export class Game {
   }
 
   public addAdaptationItems() {
-    this.addDummy(this.dummyType);
-    this.addFood(this.foodType);
+    this.addDummy(this.settings.dummyType);
+    this.addFood(this.settings.foodType);
   }
 
-  public addDummy(dummyType: DummyType, dummyParams: DummyParams = { speed: DummySpeed.Medium, matrix: this.matrix }) {
-    this.dummy = createDummyByType(dummyType, dummyParams);
+  public addDummy(dummyType: DummyType, dummyParams?: DummyParams) {
+    const params = { speed: this.settings.dummySpeed, matrix: this.matrix, ...dummyParams };
+    this.dummy = createDummyByType(dummyType, params);
   }
 
-  public addFood(foodType: FoodType, foodParams: FoodParams = { matrix: this.matrix }) {
-    this.food = createFoodByType(foodType, foodParams);
+  public addFood(foodType: FoodType, foodParams?: FoodParams) {
+    const params = { matrix: this.matrix, ...foodParams };
+    this.food = createFoodByType(foodType, params);
+  }
+
+  public applySettings(settings: GameSettings = Game.defaultSettings) {
+    this.settings = { ...this.settings, ...settings, default: Game.defaultSettings };
+  }
+
+  static get defaultSettings(): GameSettings {
+    const defaultMatrixSize = 30;
+    return {
+      matrixSize: defaultMatrixSize,
+      dummyType: DummyType.Snake,
+      dummySpeed: DummySpeed.Medium,
+      foodType: FoodType.Apple,
+      useSounds: true,
+    };
   }
 }
