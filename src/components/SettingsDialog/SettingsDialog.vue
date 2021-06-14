@@ -102,10 +102,10 @@ export default {
       resumeGameProcess,
     };
   },
-  data() {
-    return {
-      settings: {},
-    };
-  },
+  // data() {
+  //   return {
+  //     settings: {},
+  //   };
+  // },
 };
 </script>

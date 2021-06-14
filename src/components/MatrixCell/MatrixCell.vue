@@ -95,6 +95,7 @@ export default {
       }
     }
 
+    // TODO: optimize code - take out logic to separate function
     function calcTurnBorderRadius(closestPositions: MatrixPosition[]): string {
       switch (true) {
         case checkTurn(DummyTurn.TopLeft, closestPositions): return '0 0 50% 0';
@@ -120,7 +121,6 @@ export default {
     }
 
     function isTurnTopLeft(closestPositions: MatrixPosition[]): boolean {
-      // TODO: optimize code - take out logic to separate function
       return closestPositions[0].row === position.row - 1 && closestPositions[1].column === position.column - 1;
     }
 
