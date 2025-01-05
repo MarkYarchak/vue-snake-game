@@ -1,6 +1,7 @@
 import { fromEvent, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs/operators';
 import { reactive } from 'vue';
+import deviceDetect from 'mobile-device-detect';
 import { DummyDirection } from '../dummy/Dummy';
 import { setDummyDirection } from '../dummy/dummy.service';
 import { Game, GameStatus, GameSettings } from './Game';
@@ -42,7 +43,7 @@ export function restartGame() {
 }
 
 function isMobile(): boolean {
-  return false; // TODO: add real isMobile checker
+  return deviceDetect.isMobile;
 }
 
 export function initGameUtils() {
