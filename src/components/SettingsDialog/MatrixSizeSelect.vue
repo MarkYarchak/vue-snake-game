@@ -2,56 +2,33 @@
   <div class="nes-field">
     <label for="matrix_size_select">Cells count</label>
 
-    <!--        <progress class="nes-progress is-primary" value="80" min="7" max="100"></progress>-->
     <input
       id="matrix_size_select"
-      :value="value"
-      placeholder="Count"
+      v-model="modelValue"
       :min="MatrixSize.Min"
       :max="MatrixSize.Max"
+      :maxlength="3"
+      :class="{ 'is-error': !isValid }"
       type="number"
+      placeholder="Count"
       class="nes-input is-primary"
-      @keydown="onKeyDown"
     >
   </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { computed, defineModel } from 'vue';
 import { Game } from '@/services/game/Game';
 import { MatrixSize } from '@/services/game/matrix.service';
 
-// enum InputKey {
-//   Backspace = 'Backspace',
-// }
+const modelValue = defineModel({
+  type: [Number, String],
+  default: Game.defaultSettings.matrixSize,
+});
 
-export default {
-  name: 'MatrixSizeSelect',
-  props: {
-    value: {
-      type: Number,
-      default: Game.defaultSettings.matrixSize,
-    },
-  },
-  setup() {
+const isValid = computed(() => validateValue(modelValue.value));
 
-    function onKeyDown($event) {
-      console.log($event.target.value);
-      const { value: val } = $event.target;
-      console.log(typeof val);
-      if (val)
-        console.log($event);
-      const invalidVal = $event.target.value > MatrixSize.Max || $event.target.value < MatrixSize.Min;
-
-      if (invalidVal) {
-        $event.preventDefault();
-      }
-      return false;
-    }
-
-    return {
-      MatrixSize,
-      onKeyDown,
-    };
-  },
-};
+function validateValue(val) {
+  return val <= MatrixSize.Max && val >= MatrixSize.Min;
+}
 </script>

@@ -24,9 +24,7 @@
 
       <br>
 
-      <MatrixSizeSelect
-        v-model.number.trim="matrixSizeValue"
-      />
+      <MatrixSizeSelect v-model.number.trim="matrixSize" />
 
       <br>
 
@@ -54,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { watch, ref, reactive, toRaw } from 'vue';
+import { ref, reactive, toRaw } from 'vue';
 import { resumeGameProcess, restartGame } from '@/services/game/game.service';
 import { DummySpeed } from '@/services/dummy/Dummy';
 import { Game } from '@/services/game/Game';
@@ -78,34 +76,25 @@ export default {
   setup(props: Props) {
     const settings = reactive({ ...props.game.settings });
 
-    const matrixSizeValue = ref(settings.matrixSize);
+    const matrixSize = ref(settings.matrixSize);
 
     const dummySpeedList: string[] = Object.keys(DummySpeed).filter(s => !Number(s));
 
     const applyGameSetting = () => {
       console.log(settings);
-      settings.matrixSize = 100;
+      settings.matrixSize = matrixSize.value;
       props.game.applySettings(toRaw(settings));
       resumeGameProcess();
       restartGame();
     };
 
-    watch(matrixSizeValue, (newVal) => {
-      console.log(newVal);
-    });
-
     return {
       settings,
-      matrixSizeValue,
+      matrixSize,
       dummySpeedList,
       applyGameSetting,
       resumeGameProcess,
     };
   },
-  // data() {
-  //   return {
-  //     settings: {},
-  //   };
-  // },
 };
 </script>
