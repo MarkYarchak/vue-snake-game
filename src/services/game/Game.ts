@@ -20,7 +20,7 @@ export enum GameStatus {
   Stopped = 'STOPPED_GAME_STATUS',
   Restarted = 'RESTARTED_GAME_STATUS',
   Finished = 'FINISHED_GAME_STATUS',
-  Destroyed = 'DESTROYED_GAME_STATUS', // Can be removed in future. Not recommended to bind with
+  Destroyed = 'DESTROYED_GAME_STATUS', // Can be removed in the future. Not recommended to bind with
 }
 
 export class Game {
@@ -72,7 +72,8 @@ export class Game {
   }
 
   public restart() {
-    this.finish();
+    this.stop();
+    this.destroy();
     this.compareAndSaveScore();
     this.rollBackDefaultState();
     this.addAdaptationItems();
