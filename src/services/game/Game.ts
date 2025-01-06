@@ -44,18 +44,6 @@ export class Game {
     this.status = status;
   }
 
-  public get styles() {
-    return {};
-  }
-
-  public get boardStyles() {
-    const playFieldSize = '800px';
-    return {
-      width: playFieldSize,
-      height: playFieldSize,
-    };
-  }
-
   public start() {
     this.dummy.startMoving();
     this.setGameStatus(GameStatus.Running);

@@ -1,5 +1,5 @@
 <template>
-  <div :style="game.boardStyles" class="GameBoard">
+  <div class="GameBoard game-board">
     <MatrixRow
       v-for="(matrixRow, idx) of game.matrix"
       :key="idx"
@@ -28,16 +28,14 @@ export default {
 </script>
 
 <style scoped>
-
-  .GameBoard {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    background-color: dodgerblue;
-    border: 1px solid black;
-  }
-
+.game-board {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 740px;
+  background-color: dodgerblue;
+  border: 1px solid black;
+}
 </style>

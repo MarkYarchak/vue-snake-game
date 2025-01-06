@@ -1,5 +1,5 @@
 <template>
-  <div :style="game.styles" class="Game">
+  <div class="Game">
     <GameActionsBar :game="game" />
     <GameBoard :game="game" />
   </div>
@@ -25,16 +25,14 @@ export default {
 </script>
 
 <style scoped>
-
-  @media screen and (max-width: 800px) {
-    .Game {
-      zoom: 60%;
-    }
+@media screen and (max-width: 800px) {
+  .Game {
+    zoom: 60%;
   }
-
-  @media screen and (max-width: 600px) {
-    .Game {
-      zoom: 44%;
-    }
+}
+@media screen and (max-width: 600px) {
+  .Game {
+    zoom: 44%;
   }
+}
 </style>
