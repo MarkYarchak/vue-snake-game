@@ -1,18 +1,20 @@
 <template>
   <div class="nes-field">
-    <label htmlFor="speed_select">Speed</label>
+    <label for="speed_select">Speed</label>
     <div class="nes-select is-primary">
       <select
         id="speed_select"
+        :value="modelValue"
         :defaultValue="1"
         required
+        @input="modelValue = $event.target.value"
       >
         <option
-          v-for="(speed, sIdx) of dummySpeedList"
-          :key="sIdx"
+          v-for="speed of dummySpeedList"
+          :key="speed"
           :value="speed"
         >
-          {{ speed }}
+          {{ getDummySpeedName(speed) }}
         </option>
       </select>
     </div>
@@ -21,9 +23,9 @@
 
 <script setup lang="ts">
 import { defineModel } from 'vue';
-import { DummySpeed } from '@/services/dummy/Dummy';
+import { getDummySpeedOptions, getDummySpeedName } from '@/services/dummy/dummy.service';
 
-defineModel();
+const modelValue = defineModel();
 
-const dummySpeedList: string[] = Object.keys(DummySpeed).filter(s => !Number(s));
+const dummySpeedList = getDummySpeedOptions();
 </script>

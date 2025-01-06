@@ -1,4 +1,4 @@
-import { DummyParams, DummyDirection, Dummy } from './Dummy';
+import { Dummy, DummyDirection, DummyParams, DummySpeed } from './Dummy';
 import { Snake } from './skins/Snake';
 
 export enum DummyType {
@@ -30,4 +30,21 @@ function createNewDummy(type: DummyType, dummyParams: DummyParams) {
 export function setDummyDirection(dummy: Dummy, direction: DummyDirection) {
   dummy.setDirection(direction);
   dummy.addMoveDirectionAction(direction);
+}
+
+export function getDummySpeedOptions(): DummySpeed[] {
+  return [
+    DummySpeed.Slow,
+    DummySpeed.Medium,
+    DummySpeed.Fast,
+  ];
+}
+
+export function getDummySpeedName(speed: DummySpeed) {
+  switch (speed) {
+    case DummySpeed.Slow: return 'Slow';
+    case DummySpeed.Medium: return 'Medium';
+    case DummySpeed.Fast: return 'Fast';
+    default: return 'Default';
+  }
 }
