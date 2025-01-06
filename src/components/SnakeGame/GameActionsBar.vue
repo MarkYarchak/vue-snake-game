@@ -1,5 +1,5 @@
 <template>
-  <div class="GameActionsBar">
+  <header class="GameActionsBar">
     <div class="d-flex align-center ml-1">
       <div class="Icon">
         <i class="nes-icon is-large trophy no-margin" />
@@ -38,7 +38,7 @@
 
       <SettingsDialog :game="game" />
     </section>
-  </div>
+  </header>
 </template>
 
 <script>

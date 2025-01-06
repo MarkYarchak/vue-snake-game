@@ -2,26 +2,17 @@
   <div class="Game">
     <GameActionsBar :game="game" />
     <GameBoard :game="game" />
+    <GameFooter />
   </div>
 </template>
 
-<script lang="ts">
-import GameActionsBar from './GameActionsBar.vue';
+<script setup lang="ts">
 import { createNewGame, game } from '@/services/game/game.service';
+import GameActionsBar from './GameActionsBar.vue';
 import GameBoard from './GameBoard.vue';
+import GameFooter from './GameFooter.vue';
 
-export default {
-  components: {
-    GameBoard,
-    GameActionsBar,
-  },
-  setup() {
-    createNewGame();
-    return {
-      game,
-    };
-  },
-};
+createNewGame();
 </script>
 
 <style scoped>
