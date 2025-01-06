@@ -13,6 +13,7 @@
       <footer class="dialog-menu" style="padding: 14px 20px 0">
         <button class="nes-btn" style="margin-right: 12px" @click="onCancel">Cancel</button>
         <button
+          :disabled="!isValidForm"
           :class="{ 'is-disabled': !isValidForm }"
           class="nes-btn is-primary"
           style="margin-left: 12px; padding: 6px 24px"
@@ -26,20 +27,21 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRaw, defineProps } from 'vue';
+import { reactive, computed, toRaw, defineProps } from 'vue';
 import { resumeGameProcess, restartGame } from '@/services/game/game.service';
 import { Game } from '@/services/game/Game';
 import MatrixSizeSelect from '@/components/SettingsDialog/MatrixSizeSelect.vue';
 import DummySpeedSelect from '@/components/SettingsDialog/DummySpeedSelect.vue';
 import ToggleGameSoundRadio from '@/components/SettingsDialog/ToggleGameSoundRadio.vue';
+import { isValidMatrixLength } from '@/services/game/matrix.service';
 
 interface Props {
   game: Game;
 }
 const props = defineProps<Props>();
 
-const isValidForm = true;
 const settings = reactive(getInitialSettings());
+const isValidForm = computed(() => isValidMatrixLength(settings.matrixSize));
 
 function applyGameSetting() {
   props.game.applySettings(toRaw(settings));

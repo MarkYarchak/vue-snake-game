@@ -44,12 +44,16 @@ export function createMatrixCells(matrix: Matrix, count: number) {
 }
 
 export function tryFillInMatrix(matrix: Matrix, value: CellType): Matrix {
-  if (!isValid(matrix)) throwError('Invalid matrix. It must contain at least few arrays with content');
+  if (!isValidMatrix(matrix)) throwError('Invalid matrix. It must contain at least few arrays with content');
   return fillInMatrixCells(matrix, value);
 }
 
-function isValid(matrix: Matrix): boolean {
-  return matrix.length > 0;
+export function isValidMatrix(matrix: Matrix): boolean {
+  return isValidMatrixLength(matrix.length);
+}
+
+export function isValidMatrixLength(length: number): boolean {
+  return length >= MatrixSize.Min && length <= MatrixSize.Max;
 }
 
 function throwError(message: string) {
