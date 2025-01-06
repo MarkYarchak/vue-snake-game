@@ -33,7 +33,7 @@
         style="height: 50px; margin-left: 10px"
         @click="onSettingsClick"
       >
-        Pause
+        Menu
       </button>
 
       <SettingsDialog :game="game" />
